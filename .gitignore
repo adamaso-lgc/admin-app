@@ -1,0 +1,7 @@
+.terraform/**/.terraform/
+.terraform/**/.terraform.lock.hcl
+.terraform/**/terraform.tfstate.backup
+*.tfstate.*
+
+# Ignored vscode files
+.vscode/

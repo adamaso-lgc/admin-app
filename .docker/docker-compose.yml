@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  localstack:
+    image: localstack/localstack:${LOCALSTACK_VERSION}
+    container_name: "${LOCALSTACK_CONTAINER_NAME}"
+    hostname: "${LOCALSTACK_CONTAINER_NAME}"
+    environment: 
+      DOCKER_HOST: unix:///var/run/docker.sock
+      PERSISTENCE: ${LOCALSTACK_PERSISTENCE}
+      LS_LOG: ${LOCALSTACK_LOG_LEVEL}
+    ports:
+      - "4566:4566"
+    volumes:
+      - localstack:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./../.localstack/init:/etc/localstack/init/ready.d
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:4566/_localstack/health" ]
+      interval: 10s
+      timeout: 5s
+      start_period: 15s
+      retries: 5
+
+  dynamodb-admin:
+    image: "aaronshaf/dynamodb-admin"
+    container_name: "dynamodb-admin"
+    ports:
+      - "8001:8001"
+    environment:
+      DYNAMO_ENDPOINT: "http://${LOCALSTACK_CONTAINER_NAME}:4566"
+      AWS_REGION: ${AWS_DEFAULT_REGION}
+
+volumes:
+  localstack:
+
