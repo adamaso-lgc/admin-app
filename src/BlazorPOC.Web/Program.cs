@@ -1,3 +1,4 @@
+using Amazon.DynamoDBv2;
 using BlazorPOC.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddDynamoDB(builder.Configuration);
+builder.Services.AddSingleton<IProjectService, ProjectService>();
 
 var app = builder.Build();
 
