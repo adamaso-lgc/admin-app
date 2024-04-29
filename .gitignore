@@ -5,3 +5,5 @@
 
 # Ignored vscode files
 .vscode/
+
+.idea/
